@@ -7,25 +7,20 @@ function getComputerChoice() {
     return choices[randomInt];
 }
 
-
-
 function getHumanChoice() {
-    
     let keepGoing = true;
     while (keepGoing) {
         let choice = prompt("Chose 'rock', 'paper', or 'scissors': ").toLowerCase();
-        
-
         if (choice === "rock" || choice === "scissors" || choice === "paper" ) {
             keepGoing = false;
             return choice;
         } else {
             alert("Enter a valid value!");
-            
         }
     }
 }
 
+// Get the result for a single pairing of rock, paper, scissors and return "toe" or the winner, i.e. "computer" or "human"
 function getResult(computer, human) {
     console.log(`Player chooses: ${human} | Computer chooses: ${computer}`);
     if (computer === human) {
@@ -39,6 +34,8 @@ function getResult(computer, human) {
     }
 }
 
+// Simulate a single round of rock, paper, scissors.
+// Add score, and log the result.
 function playRound() {
     let computerChoice = getComputerChoice();
     let humanChoice = getHumanChoice();
@@ -61,12 +58,11 @@ function playRound() {
 
 }
 
-
+// simulate a game of 5 rounds
 function playGame() {
     for (let i = 0; i < 5; i++) {
         playRound();
     }
-
     if(humanScore > computerScore) {
         console.log(`Player wins the game with ${playerScore} points!`);
     } else {
