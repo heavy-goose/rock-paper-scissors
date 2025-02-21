@@ -1,75 +1,86 @@
 let humanScore = 0;
 let computerScore = 0;
 
+const playerScoreDisplay = document.querySelector(".player-score");
+const computerScoreDisplay = document.querySelector(".computer-score");
+
+const buttons = document.querySelectorAll("button");
+const replayButton = document.querySelector("#replay");
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+
+const message = document.querySelector(".message");
+const choices = document.querySelector("#choices");
+const roundResult = document.querySelector("#round-result");
+
+rock.addEventListener("click", (e) => playRound("rock"));
+paper.addEventListener("click", (e) => playRound("paper"));
+scissors.addEventListener("click", (e) => playRound("scissors"));
+
 function getComputerChoice() {
     let choices = ["rock", "paper", "scissors"];
     let randomInt = Math.floor(Math.random() * 3);
     return choices[randomInt];
 }
 
-function getHumanChoice() {
-    let keepGoing = true;
-    while (keepGoing) {
-        let choice = prompt("Chose 'rock', 'paper', or 'scissors': ").toLowerCase();
-        if (choice === "rock" || choice === "scissors" || choice === "paper" ) {
-            keepGoing = false;
-            return choice;
-        } else {
-            alert("Enter a valid value!");
-        }
-    }
-}
-
-// Get the result for a single pairing of rock, paper, scissors and return "toe" or the winner, i.e. "computer" or "human"
+// Get the result for a single pairing of rock, paper, scissors
 function getResult(computer, human) {
-    console.log(`Player chooses: ${human} | Computer chooses: ${computer}`);
+    choices.innerText = `Player: ${human} |vs| ${computer}: Computer`
     if (computer === human) {
         return "tie";
     } else if ((computer === "rock" && human === "scissors") || (computer === "paper" && human === "rock") || (computer === "scissors" && human == "paper")) {
-        console.log(`${computer} beats ${human}!`);
         return "computer"
     } else {
-        console.log(`${human} beats ${computer}!`);
         return "human";
     }
 }
 
 // Simulate a single round of rock, paper, scissors.
-// Add score, and log the result.
-function playRound() {
+function playRound(humanChoice) {
     let computerChoice = getComputerChoice();
-    let humanChoice = getHumanChoice();
-
     let winner = getResult(computerChoice, humanChoice);
     switch (winner) {
         case "computer":
-            console.log("Computer wins!");
+            roundResult.innerText = "Computer + 1 Point!"
             computerScore++;
             break;
         case "human":
-            console.log("Player wins!");
+            roundResult.innerText = "Player + 1 Point!"
             humanScore++;
             break;
         default:
-            console.log("It's a tie!");
+            roundResult.innerText = "It's a tie!"
             break;
     }
-    console.log(`Player Score: ${humanScore} | Computer Score: ${computerScore}`);
-
-}
-
-// simulate a game of 5 rounds
-function playGame() {
-    for (let i = 0; i < 5; i++) {
-        playRound();
-    }
-    if(humanScore > computerScore) {
-        console.log(`Player wins the game with ${playerScore} points!`);
-    } else {
-        console.log(`Computer wins the game with ${computerScore} points!`);
-    }
-}
-
-playGame();
-
+    displayScore();
     
+    // check if game is over
+    if (humanScore === 5 || computerScore === 5) {
+        if (humanScore > computerScore) {
+            roundResult.innerText = "YOU WIN";
+        } else {
+            roundResult.innerText = "YOU LOOSE";
+        }
+        // Hide choice buttons; "un-hide" reset button
+        buttons.forEach((button) => button.toggleAttribute("hidden"));
+    }
+}
+
+replayButton.addEventListener("click", (e) => {
+    resetGame();
+})
+    
+function displayScore() {
+    playerScoreDisplay.innerHTML = `Player: ${humanScore}`;
+    computerScoreDisplay.innerHTML = `Computer: ${computerScore}`;
+}
+
+function resetGame() {
+    humanScore = 0;
+    computerScore = 0;
+    displayScore();
+    roundResult.innerText = "";
+    choices.innerText = "";
+    buttons.forEach((button) => button.toggleAttribute("hidden"));
+}
